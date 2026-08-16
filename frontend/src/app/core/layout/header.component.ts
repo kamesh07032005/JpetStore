@@ -1,0 +1,6 @@
+import { Component } from '@angular/core';
+@Component({ selector: 'app-header', template: `
+  <header><a class="brand" routerLink="/">JPetStore</a><nav aria-label="Primary navigation">
+    <a routerLink="/catalog" routerLinkActive="active">Catalog</a><a routerLink="/account" routerLinkActive="active">Account</a><a routerLink="/cart" routerLinkActive="active">Cart</a><a routerLink="/orders" routerLinkActive="active">Orders</a>
+  </nav></header>` })
+export class HeaderComponent { }
