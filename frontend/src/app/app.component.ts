@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
 
-@Component({ selector: 'app-root', template: '<app-header></app-header><main class="page"><router-outlet></router-outlet></main>' })
+// This is the main page frame. Every route is shown inside router-outlet.
+@Component({ selector: 'app-root', templateUrl: './app.component.html' })
 export class AppComponent { }

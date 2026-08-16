@@ -10,17 +10,20 @@ public class Item {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
     @NotBlank @Size(max = 40) @Column(nullable = false, unique = true, length = 40) private String sku;
     @Size(max = 500) @Column(length = 500) private String description;
+    @Size(max = 500) @Column(length = 500) private String imageUrl;
     @NotNull @DecimalMin(value = "0.00") @Column(nullable = false, precision = 10, scale = 2) private BigDecimal listPrice;
     @NotNull @Min(0) @Column(nullable = false) private Integer quantity;
     @ManyToOne(fetch = FetchType.LAZY, optional = false) @JoinColumn(name = "product_id", nullable = false) private Product product;
     protected Item() { }
-    public Item(String sku, String description, BigDecimal listPrice, Integer quantity) { this.sku = sku; this.description = description; this.listPrice = listPrice; this.quantity = quantity; }
+    public Item(String sku, String description, String imageUrl, BigDecimal listPrice, Integer quantity) { this.sku = sku; this.description = description; this.imageUrl = imageUrl; this.listPrice = listPrice; this.quantity = quantity; }
     public void setProduct(Product product) { this.product = product; }
     public Long getId() { return id; }
     public String getSku() { return sku; }
     public void setSku(String sku) { this.sku = sku; }
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
     public BigDecimal getListPrice() { return listPrice; }
     public void setListPrice(BigDecimal listPrice) { this.listPrice = listPrice; }
     public Integer getQuantity() { return quantity; }

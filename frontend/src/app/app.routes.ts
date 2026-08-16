@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './features/home/home.component';
-import { PlaceholderComponent } from './shared/components/placeholder.component';
+import { PlaceholderComponent } from './shared/placeholder.component';
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'catalog', component: PlaceholderComponent, data: { feature: 'Catalog' } },

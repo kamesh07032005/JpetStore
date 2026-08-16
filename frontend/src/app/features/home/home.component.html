@@ -1,0 +1,20 @@
+<section class="hero">
+  <p class="eyebrow">Welcome to</p>
+  <h1>JPetStore</h1>
+  <p>Everything your pet needs, thoughtfully organized.</p>
+</section>
+
+<app-loading *ngIf="healthLoading"></app-loading>
+<app-error-message *ngIf="healthError" [message]="healthError"></app-error-message>
+
+<section aria-labelledby="categories">
+  <h2 id="categories">Shop by pet</h2>
+
+  <div class="categories">
+    <a class="category" routerLink="/catalog" *ngFor="let category of categories">
+      <span>{{ category.icon }}</span>
+      <h3>{{ category.name }}</h3>
+      <p>{{ category.description }}</p>
+    </a>
+  </div>
+</section>
