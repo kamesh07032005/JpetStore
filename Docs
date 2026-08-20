@@ -1,0 +1,471 @@
+
+JPetStore
+Planning and Design Document
+Version: 0.2
+Date: 13.08.2026
+Author
+ Kamesh M
+Harii Kumaran V
+Vishva P
+Indhumathi M
+Bhuvaneshwari V
+Karishma Banu Shaik
+Fazeen Alimurtuza Patel
+
+Approval & Signoff
+Designation	Name	Approval with Date
+QA Manager	Saravana S (254618)                                       	
+
+
+
+ 
+Table of Contents
+Section No.	Description	Page No.
+1	Introduction	3
+1.1	Overview	3
+1.2	Purpose of the Document	3
+1.3	Objectives	4
+2	Architecture Design	5
+2.1	Architecture Overview	5
+2.2	Architecture Diagram	8
+2.3	Component Responsibilities	8
+3	High Level Design (HLD)	9
+3.1	System Modules	9
+3.1.1	User Module	9
+3.1.2	Category Module	9
+3.1.3	Catalogue Module	10
+3.1.4	Cart Module	10
+3.1.5	Order Module	10
+3.2	Module Interaction	11
+3.3	Data Flow	12
+4	Low Level Design (LLD)	13
+4.1	Class Design	13
+4.1.1	Entity Relationship Diagram	15
+4.2	Cart Sequence Diagram	16
+4.3	Order Sequence Diagram	17
+4.4	API Design	18
+5	Scope	20
+5.1	In Scope	20
+5.2	Out of Scope	20
+6	Technology Stack	21
+7	Team Structure and Roles	22
+8	Project Timeline	23
+
+ 
+1. Introduction
+1.1 Overview
+JPetStore is a web-based e-commerce application developed around the concept of an online pet store. The application allows customers to browse various categories of pets and pet-related products, view detailed product information, maintain shopping carts, and place orders through a user-friendly interface. The project simulates the functionality of a real-world e-commerce platform and provides an understanding of the various components involved in enterprise application development.
+The application follows a layered architecture that separates presentation, business logic, data access, and database functionalities. Such an architectural approach improves maintainability, scalability, and reusability by ensuring that each layer has a clearly defined responsibility. The system is designed to demonstrate industry-standard software development practices and support end-to-end business processes starting from product browsing and cart management to order placement and order history tracking.
+The official JPetStore 6 implementation is developed using Java as the primary programming language and leverages Spring Framework for dependency management and application services. The web layer is implemented using the Stripes MVC framework, while database interaction is handled through MyBatis. Persistent data storage is provided by HSQLDB, a lightweight relational database management system. Together, these technologies create a complete enterprise application environment suitable for learning modern software engineering concepts.
+The major business functionalities supported by the application include user authentication, category management, product catalogue management, shopping cart operations, order creation, database management, and testing activities.
+1.2 Purpose of the Document
+The purpose of this Planning and Design Document is to describe the overall design, architecture, implementation approach, and project organization for the JPetStore application. The document provides a comprehensive overview of the system and serves as a reference for all stakeholders involved in the project lifecycle, including developers, testers, reviewers, and project coordinators.
+This document outlines the functional requirements, architectural design, high-level and low-level system design, technology stack, project scope, team responsibilities, testing approach, and implementation timeline. 
+It also provides sufficient information to ensure consistency in development activities and acts as a baseline for future enhancements, maintenance activities, and project reviews.
+By documenting the technical and functional aspects of the application, the project team can ensure a common understanding of project objectives and implementation strategies throughout the development process.
+1.3 Objectives
+The Presentation Layer provides the front-end interface through which users interact with the application. It contains pages for registration, login, category browsing, product viewing, cart management, and order placement.
+Technology Used: HTML, CSS, JavaScript
+Responsibilities:
+•	Provide user interfaces
+•	Capture user inputs
+•	Display products, cart details, and order information
+•	Send HTTP requests to backend REST endpoints
+•	Display HTTP responses received from the backend 
+The primary objective of the JPetStore project is to develop a fully functional online pet-store application that accurately represents the workflow of a typical e-commerce system. The project aims to provide practical experience in building multi-layered enterprise applications using Java-based technologies and established architectural principles.
+Another objective is to implement a modular and maintainable solution that separates presentation concerns from business logic and database operations. The application should provide secure user authentication, efficient product browsing facilities, shopping cart management capabilities, and order-processing workflows.
+The project also aims to demonstrate effective integration between user interface components, application services, persistence mechanisms, and relational databases. In addition, functional testing and performance validation activities will be carried out to ensure system reliability and quality. Throughout development, industry best practices such as code modularity, maintainability, and reusability will be followed to ensure the long-term sustainability of the application.
+
+ 
+2. Architecture Design
+2.1 Architecture Overview
+The JPetStore application follows a layered architecture that separates the presentation, backend application, data access, and database responsibilities. This separation improves maintainability, reusability, and communication between different components. The architecture and request flow are illustrated in Figure 2.1
+The major layers are:
+Presentation Layer
+The Presentation Layer provides the user interface through which users interact with the JPetStore application. It is responsible for displaying information to users and collecting user inputs for various business operations. This layer includes web pages for user registration, login, category browsing, product viewing, shopping cart management, and order placement. It ensures a user-friendly experience and acts as the communication point between users and the backend application.
+Technologies Used: HTML, CSS, JavaScript
+Responsibilities:
+•	Display user interfaces
+•	Capture user inputs
+•	Present product and order information
+•	Send requests to the backend system
+•	Display responses received from the application
+Backend Application Layer
+The Backend Application Layer receives requests from the frontend and processes them through the REST API and Spring MVC Controllers. The controllers validate request details and delegate processing to the appropriate service components.
+Technologies Used: Java, Spring Boot, Spring MVC
+Responsibilities:
+•	Expose REST API endpoints
+•	Receive HTTP requests containing JSON data
+•	Validate request parameters
+•	Route requests to appropriate services
+•	Handle application-level responses
+•	Coordinate communication between frontend and business services
+
+
+
+
+Business Layer
+
+The Business Layer contains the core business logic of the application. Services process user, category, product, cart, and order operations. The layer performs business validations before requesting data from, or sending data to, the data-access layer.
+Technologies Used: Java, Spring Framework
+Responsibilities:
+•	Implement application business rules
+•	Process user authentication
+•	Manage category and catalogue operations
+•	Validate product availability
+•	Handle adding, updating, and removing cart items
+•	Calculate cart and order totals
+•	Create and process orders
+•	Coordinate related data operations
+
+Data Access Layer
+
+The Data Access Layer provides communication between the business layer and the MySQL database. Repository classes perform CRUD operations and convert database records into entity or model objects used by the application.
+Technology Used: Repository Classes with JDBC or the configured database-access framework
+Responsibilities:
+•	Execute database operations
+•	Retrieve application records
+•	Insert, update, and delete records
+•	Map database results to entity/model objects
+•	Provide a consistent interface for database communication
+•	Maintain the separation between business logic and SQL operations
+
+
+
+
+
+
+
+
+Database Layer
+
+The Database Layer provides persistent storage for application data. MySQL stores user details, categories, products, cart information, order records, and order-item details.
+Technology Used: MySQL
+Supporting Tool: MySQL Workbench
+Responsibilities:
+•	Store application data
+•	Maintain relational tables and relationships
+•	Enforce primary-key and foreign-key constraints
+•	Support database queries and updates
+•	Maintain data consistency and integrity
+•	Provide persistent storage for business transactions
+
+ 
+2.2 Architecture Diagram
+The overall architecture of JPetStore, showing the flow of a request from the user through each layer down to the database, is illustrated below.
+
+ 
+
+Figure 2.1: JPetStore Layered Architecture
+2.3 Component Responsibilities
+Component	Responsibility
+Frontend	User interaction and presentation
+Controller	Handle REST requests and responses
+Service	Implement business logic
+Repository	Database operations
+Entity/Model	Represent database objects
+Database	Persistent data storage
+Authentication	User login and access control
+ 
+3. High Level Design
+3.1 System Modules
+The application is divided into the following major modules.
+3.1.1 User Module
+The User Module handles all user-related operations, including registration, authentication, and profile management. It ensures secure access to the application and maintains user account information throughout the user lifecycle.
+Functions include:
+●	User registration 
+●	User login
+●	User profile
+●	Authentication
+●	Logout
+●	User information management
+3.1.2 Category Module
+The Category Module organizes pets into predefined categories such as Fish, Dogs, Cats, Reptiles, and Birds. It enables users to browse categories and navigate easily to related products.
+
+Example categories:
+●	Fish
+●	Dogs
+●	Cats
+●	Reptiles
+●	Birds
+Functions:
+●	Retrieve categories
+●	Display categories
+●	Navigate from category to products
+
+
+
+3.1.3 Catalogue Module
+The Catalogue Module manages the products available in the application and provides product information to users. It supports product search, category-based filtering, availability checks, and detailed product viewing.
+
+Functions:
+●	Retrieve products
+●	Search products
+●	Filter products by category
+●	Display product details
+●	Check product availability
+3.1.4 Cart Module
+The Cart Module allows users to manage products selected for purchase before checkout. It provides functionalities such as adding items, updating quantities, removing products, and calculating the total order value.
+
+Functions:
+●	Add product to cart
+●	View cart
+●	Update quantity
+●	Remove product
+●	Calculate total
+●	Clear cart
+3.1.5 Order Module
+The Order Module manages the complete order lifecycle from checkout to order history tracking. It is responsible for creating orders, storing order details, calculating totals, and maintaining purchase records.
+
+Functions:
+●	Create order
+●	Store order details
+●	Store order items
+●	Calculate order total
+●	View order history
+●	Retrieve order details
+ 
+3.2 Module Interaction
+The module interaction flow represents how different modules communicate with each other during a business transaction. Starting from user authentication, data flows through the category, catalogue, cart, and order modules to complete the purchasing process.
+ 
+Figure 3.1: Module Interaction Flow
+
+
+Module Interaction Flow
+
+1. The user authenticates through the User Module.
+2.The User Module validates the credentials against the MySQL database and returns the authentication result.
+3.After successful login, the user browses available categories.
+4.The Category Module retrieves category information from the database and displays the categories.
+5.The user selects a category, and the Catalogue Module fetches the related products.
+6.The Catalogue Module retrieves product details and displays the product list.
+7. The user selects a product to view the detailed product information.
+8. When the user adds a product to the cart, the Cart Module creates or updates the corresponding cart item.
+9.The Cart Module displays the current cart contents.
+10. After checkout, cart information is transferred to the Order Module.
+11.The Order Module creates the order and stores the order items in the database.
+12.The database returns the generated order ID and saved-item confirmation.
+13.The Order Module sends the order confirmation to the user through the displayed frontend interface.
+
+3.3 Data Flow
+
+The data flow illustrates how requests and responses travel through the system architecture. User requests are processed by the Controller and Service layers, which interact with the database through the Repository layer before returning results to the user interface.
+
+1. The user sends a request through the frontend.
+2. The frontend sends an HTTP request to the appropriate REST API.
+3. The Controller receives the request.
+4. The Controller passes the request to the Service layer.
+5. The Service performs business validation and processing.
+6. The Repository interacts with the database.
+7. The database returns the requested information.
+8. The response travels back through the Service and Controller.
+9. The frontend displays the result to the user.
+ 
+4. Low Level Design
+4.1 Class Design
+The backend follows a layered architecture consisting of Controller, Service, Repository, and Entity layers. This separation of concerns improves maintainability, scalability, and testability. Each layer has a specific responsibility and communicates with adjacent layers.
+Entity Classes
+●	User: Represents a registered customer of the application. It stores user information such as username, password, email, address, and account details. A user can manage a cart and place multiple orders.
+●	Category: Represents product grouping within the store. Categories help organize products based on their type or purpose and simplify product browsing.
+●	Product: Represents an item available for purchase. It contains product information such as name, description, price, stock quantity, and category association.
+●	Cart: Represents a user's shopping cart. It maintains the collection of items selected by the user before checkout and tracks the overall cart value.
+●	Cart Item: Represents an individual product entry in a cart. It stores the selected product and its quantity within the cart.
+●	Order: Represents a completed purchase made by a user. It contains order details such as total amount, order date, status, and associated order items.
+●	Order Item: Represents an individual product within an order. It stores product details, quantity purchased, and item-specific pricing information.
+Controller Classes
+Controller classes act as the entry point of the application. They receive HTTP requests from the client, invoke the appropriate service methods, and return responses to the user.
+
+●	UserController
+●	CategoryController
+●	ProductController
+●	CartController
+●	OrderController
+
+
+Service Classes
+The Service layer contains the application's business logic and acts as an intermediary between the Controller and Repository layers. It processes requests, applies validations and business rules, and coordinates data operations.
+
+●	UserService
+●	CategoryService
+●	ProductService
+●	CartService
+●	OrderService
+Repository Classes
+The Repository layer is responsible for database access and data persistence. It provides methods to perform CRUD (Create, Read, Update, Delete) operations and acts as an interface between the Service layer and the database.
+
+●	UserRepository
+●	CategoryRepository
+●	ProductRepository
+●	CartRepository
+●	CartItemRepository
+●	OrderRepository
+●	OrderItemRepository
+ 
+4.1.1 Entity Relationship
+ 
+                                                   Figure 4.1: Entity Relationship Diagram
+Entity Relationship Flow
+1. A category can contain multiple products.
+2. Each product belongs to one category.
+3. A user can own one cart.
+4. A cart can contain multiple cart items.
+5. Each cart item represents a product added to the cart.
+6. A user can place multiple orders.
+7. Each order belongs to one user.
+8. An order can contain multiple order items.
+9. Each order item represents a product included in an order.
+10. The same product can appear in multiple order items across different orders.
+11. Primary keys uniquely identify each entity, while foreign keys maintain relationships between related entities.
+12. The model separates cart data from order data, allowing the cart to be updated before checkout while preserving order records after an order is created.
+ 
+4.2 Cart Sequence Diagram
+The cart workflow, from product selection to the updated cart being returned to the user, is illustrated below.
+ 
+Figure 4.2: Cart Sequence Diagram
+Cart Flow
+1. User selects a product.
+2. User clicks Add to Cart.
+3. Frontend sends a request to the Cart API.
+4. Cart Controller receives the request.
+5. Cart Service validates the product.
+6. The existing cart is checked.
+7. If the product already exists, its quantity is updated.
+8. Otherwise, a new cart item is created.
+9. The updated cart is stored in the database.
+10. The API returns the updated cart information.
+ 
+4.3 Order Sequence Diagram
+The order workflow, covering checkout, order creation, and cart clearing, is illustrated below.
+ 
+Figure 4.3: Order Sequence Diagram 
+Order Flow:
+1. User proceeds to checkout after reviewing the cart.
+2. Frontend sends an order-creation request to the Order API.
+3. Order Controller receives the request and invokes the Order Service.
+4. Order Service retrieves the current cart details.
+5. Cart Repository returns the selected cart items.
+6. Order Service validates the cart and prepares the order and order-item records.
+7. Order Repository saves the order and associated order items in the database.
+8. Database returns the saved order information.
+9. Order Service clears the cart after successful order creation.
+10.Cart Repository confirms that the cart has been cleared.
+12. Order Service returns order confirmation details to the Order Controller.
+13. Order Controller sends an HTTP 201 response containing the order information.
+14. Frontend displays the order confirmation to the user.
+
+
+
+4.4 API Design
+The application will expose REST APIs for communication between the frontend and backend.
+User APIs
+Method	Endpoint	Description
+POST	/api/users/register	Register a user
+POST	/api/users/login	Authenticate user
+GET	/api/users/{id}	Retrieve user
+PUT	/api/users/{id}	Update user
+
+Category APIs
+Method	Endpoint	Description
+GET	/api/categories	Retrieve all categories
+GET	/api/categories/{id}	Retrieve category
+
+Product APIs
+Method	Endpoint	Description
+GET	/api/products	Retrieve products
+GET	/api/products/{id}	Retrieve product
+GET	/api/categories/{id}/products	Retrieve category products
+
+Cart APIs
+Method	Endpoint	Description
+GET	/api/cart	Retrieve current cart
+POST	/api/cart/items	Add item
+PUT	/api/cart/items/{id}	Update quantity
+DELETE	/api/cart/items/{id}	Remove item
+DELETE	/api/cart	Clear cart
+Order APIs
+Method	Endpoint	Description
+POST	/api/orders	Create order
+GET	/api/orders	Retrieve user orders
+GET	/api/orders/{id}	Retrieve order details
+ 
+5. Scope
+5.1 In Scope
+The scope of this project includes the development of a web-based JPetStore application that provides core e-commerce functionalities for pet product purchasing. Users can register, log in, and manage their personal information through the system. The application allows customers to browse product categories, view product details, manage a shopping cart, and place orders. The project also includes REST API development, database integration, and frontend-backend integration to ensure smooth communication between user interfaces and backend services.
+In-Scope Functionalities:
+●	User registration
+●	User login and authentication
+●	User information management
+●	Product catalogue and categories
+●	Shopping cart management
+●	Order creation and order history
+●	REST API development
+●	Database integration
+●	Frontend-backend integration
+5.2 Out of Scope
+The current implementation focuses on the fundamental features required for an online pet store and excludes advanced integrations and enterprise-level functionalities. Features such as real payment processing, logistics management, and shipment tracking are not included. The project also does not cover mobile application development, advanced recommendation systems, or production infrastructure management. These functionalities may be considered in future versions of the application.
+Out-of-Scope Functionalities:
+●	Real payment gateway integration
+●	Real-time shipment tracking
+●	Advanced recommendation systems
+●	Native Android/iOS applications
+●	Production deployment and infrastructure management
+●	Multi-vendor marketplace functionality
+●	Email and SMS notifications
+●	Automation testing
+●	Accessibility testing
+●	Security testing
+ 
+6. Technology Stack
+Layer	Technology
+Programming Language	Java
+Backend Framework	Spring Boot, Spring MVC
+Application Framework	Spring
+API	REST API
+Database	MySQL
+Frontend	HTML, CSS, JavaScript 
+Build Tool	Maven
+Version Control	Git
+Repository	GitHub
+IDE	IntelliJ IDEA / Eclipse
+Database Tool	MySQL Workbench
+ 
+7. Team Structure and Roles
+The project consists of seven team members.
+Team Member	Role	Responsibilities
+Fazeen Alimurtuza Patel	Frontend Developer	Design and develop user interfaces for Login, Registration, Category, Product Catalogue, Cart, and Order screens using HTML, CSS, and JavaScript. Integrate frontend pages with REST APIs.
+Harii Kumaran V	Frontend Developer	Develop responsive web pages, implement client-side validations, improve user experience and navigation, perform UI testing and debugging, support frontend-backend integration, and maintain frontend code quality.
+Vishva P	Backend Developer	Develop User and Authentication modules, implement REST APIs, create Controller and Service layer logic.
+Indhumathi M	Backend Developer	Develop Category and Catalogue modules, implement product-related APIs, business validations, and integration with the database layer.
+Karishma Banu Shaik	Backend Developer	Develop Cart and Order modules, implement cart management and order-processing APIs.
+ Kamesh M	Database	Design the database schema, create and maintain MySQL tables, define primary-key and foreign-key relationships, optimize database queries, and support backend integration with the database.
+Bhuvaneshwari V	Database	Designing the database schema, creating and maintaining tables, defining relationships between entities, writing SQL queries for CRUD operations, ensuring data integrity, and supporting the backend team with database integration.
+
+Team Responsibilities
+The team is responsible for requirement analysis, system design, database design, and implementation of the JPetStore application. Responsibilities include developing frontend interfaces, building backend REST APIs, implementing Controller and Service layer logic, integrating repository components with the database, creating user, category, catalogue, cart, and order functionalities, performing validations, resolving defects, maintaining source code, and coordinating frontend, backend, and database integration activities.
+
+
+8. Project Timeline
+
+Phase	Start Date	End Date
+Requirement Gathering and Database Schema Design	  14.08.2026	18.08.2026
+Database Creation	  19.08.2026	21.08.2026
+User API Endpoint & Authentication Interface	  24.08.2026	 26.08.2026 
+Categories API & Catalogue Interface	   27.08.2026 	01.09.2026
+Cart and Order APIs & Interfaces	  02.09.2026	 03.09.2026 
+
+ 
+9. Document Control
+Version	Date	Description	Author	Reviewer	Comments
+0.1		Initial draft of planning and design document	Kamesh M, 
+Harii Kumaran V, 
+Vishva P, 
+Indhumathi M, Bhuvaneshwari V, 
+Karishma Banu Shaik,
+Fazeen Alimurtuza Patel
+	Saravana S	
+
+Approval
+Role	Name	Signature	Date
+QA Manager	Saravana S (254618)	_______	__________
+Project Team	JPetStore Team	__________	__________
+ 
